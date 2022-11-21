@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Macondo&family=Playball&display=swap');
+
+:root{
+    --light-blue: hsl(228, 65%, 76%);
+    --light-grey: hsl(228, 0%, 80%);
+    --grey: hsl(228, 0%, 90%);
+    --theme: hsl(288, 68%, 21%);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(black, var(--theme) 300%);
+    color: white;
+    font-family: 'Playball', cursive;
+    font-size: 22px;
+    gap: 30px;
+    min-height: 98vh;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 1200px;
+}
+
+h1, h2, h3, h4, input, select, a {
+    font-family: 'Macondo', cursive;
+    text-align: center;
+}
+
+h1, h2, h3, h4 {
+    margin-bottom: 80px;
+}
+
+a {
+    color: var(--light-blue);
+    text-decoration: none;
+}
+
+a:hover {
+    color: white;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 60px;
+    width: 40%;
+}
+
+nav {
+    display: flex;
+    justify-content: space-around;
+    width: 50%;
+}
+
+input[type='submit'], label {
+    display: block;
+}
+
+input, select {
+    margin-left: 30px;
+    width: 100%;
+    display: inline-block;
+    background-color: var(--light-grey);
+    font-size: 18px;
+}
+
+input[type='submit'] {
+    margin: 0 50px;
+}
+
+label {
+    display: flex;
+    white-space: nowrap;
+    width: 100%;
+}
+
+input[type='submit'] {
+    height: 2.5rem;
+    font-size: 1.5rem;
+    background-color: white;
+    border: 2px solid var(--light-blue);
+}
+
+input[type='submit']:hover {
+    background-color: var(--theme);
+    border: 2px solid var(--light-grey);
+    color: white;
+}
+
+td, th {
+    padding: 15px 30px 10px;
+    text-align: center;
+}
+
+img {
+    height: 80px;
+    object-fit: cover;
+    width: 80px;
+}
+
+p a {
+    display: flex;
+    align-items: center;
+}
+
+*::selection {
+    background-color: var(--theme);
+}
+
+input[value='Avada Kedavra!'] {
+    background-color: rgb(169, 0, 0);
+    margin-top: 20px;
+}
+
+input[value='Obliviate!'] {
+    background-color: var(--light-blue);
+}
+
+input[value='Avada Kedavra!']:hover {
+    background-color: red;
+}
+
+input[value='Obliviate!']:hover {
+    background-color: rgb(193, 193, 255);
+    color: black;
+    border: 2px solid white;
+}
+
+input:hover, select:hover {
+    background-color: var(--grey);
+}
