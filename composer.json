@@ -1,0 +1,17 @@
+{
+    "name": "grizz/tp2",
+    "autoload": {
+        "psr-4": {
+            "Grizz\\Tp2\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Rizo",
+            "email": "g.rizzoli@hotmail.ca"
+        }
+    ],
+    "require": {
+        "twig/twig": "^2.0"
+    }
+}
