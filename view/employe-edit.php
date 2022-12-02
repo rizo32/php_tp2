@@ -88,6 +88,9 @@
             <label>Date d'embauche
                 <input type="date" name="employeDateEmbauche" value="{{ employe.employeDateEmbauche }}">
             </label>
+            <label>Courriel
+                <input type="email" name="employeCourriel" value="{{ employe.employeCourriel }}">
+            </label>
             <input type="submit" value="Obliviate!">
         </form>
         <form action="{{ path }}employe/delete" method="post">

@@ -1,6 +1,7 @@
 <?php
 RequirePage::requireModel('Crud');
 RequirePage::requireModel('ModelEmploye');
+RequirePage::requireModel('ModelPrivilege');
 
 class ControllerEmploye{
 
@@ -15,18 +16,70 @@ class ControllerEmploye{
 
     // Pour afficher la page de création d'employés
     public function create(){
-       twig::render('employe-create.php');
+        /* do I have to create new Model everytime?? */
+        $employe = new ModelEmploye;
+        $employeMotDePasse = $employe->generationMotDePasse();
+       twig::render('employe-create.php', ['privileges' => $selectPrivilege]);
     }
 
     // Pour insérer les employés dans la base de données
     public function store(){
-     $employe = new ModelEmploye;
-    // Pour ajouter la date d'aujourd'hui comme date d'embauche sans passer par le formulaire
-    $_POST['employeDateEmbauche'] = (new DateTime())->format('Y-m-d');
-    $insert = $employe->insert($_POST);
+        $validation = new Validation;
+        extract($_POST);
+        $validation->name('nom')->value($nom)->pattern('alpha')->required()->max(45);
+        // ne regarde pas si le nom est le même, seulement si ça fit le format
+        $validation->name('username')->value($username)->pattern('email')->required()->max(50);
+        $validation->name('password')->value($password)->max(20)->min(6);
+        $validation->name('privilege_id')->value($privilege_id)->pattern('int')->required();
 
-    requirePage::redirectPage('employe');
+        if($validation->isSuccess()){
+            $employe = new ModelEmploye;
+            $options = [
+                // Parce que je suis suiveux
+                'cost' => 10,
+            ];
+            $_POST['password']= password_hash($_POST['password'], PASSWORD_BCRYPT, $options);
+            // Pour ajouter la date d'aujourd'hui comme date d'embauche sans passer par le formulaire
+            $_POST['employeDateEmbauche'] = (new DateTime())->format('Y-m-d');
+            $insert = $employe->insert($_POST);
+            requirePage::redirectPage('employe');
+        }else{
+            $errors = $validation->displayErrors();
+            $privilege = new ModelPrivilege;
+            $selectPrivilege = $privilege->select();
+            twig::render('employe-create.php', ['errors' => $errors,'privileges' => $selectPrivilege, 'employe' => $_POST]);
+        }
     }
+
+    public function login(){
+        twig::render('employe-login.php');
+    }
+
+    public function auth(){
+        $validation = new Validation;
+        extract($_POST);
+        $validation->name('username')->value($username)->pattern('email')->required()->max(50);
+        $validation->name('password')->value($password)->required();
+
+        if($validation->isSuccess()){
+
+            $employe = new ModelEmploye;
+            $checkEmploye = $employe->checkEmploye($_POST);
+            
+            twig::render('employe-login.php', ['errors' => $checkEmploye, 'user' => $_POST]);
+        
+        }else{
+            $errors = $validation->displayErrors();
+            twig::render('employe-login.php', ['errors' => $errors, 'employe' => $_POST]);
+        }
+    }
+
+
+    public function logout(){
+        session_destroy();
+        requirePage::redirectPage('employe/login');
+    }
+
 
     // Fait intervenir des données de trois tables: employe, poste, ecole
     public function show($employeId){

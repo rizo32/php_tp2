@@ -26,11 +26,17 @@
             <label>Prénom
                 <input type="text" name="employePrenom">
             </label>
-            <label>Votre poste
+            <label>Poste
             <select name="employePosteId">
                 <option value=2>Professeur</option>
                 <option value=3>Aide-cuisinier</option>
             </select></label>
+            <label>Courriel
+                <input type="email" name="employeCourriel">
+            </label>
+            <label>Mot de passe temporaire
+                <!-- l'input est text et non pas password pour que Dumbledor puisse le noter et le remettre à l'employé afin que ce dernier le change -->
+                <input type="text" name="employeMotDePasse" value="{{ employeMotDePasse }}">
             <input type="hidden" name="employeEcoleId" value=1>
             <input type="submit" value="Wingardium Leviosa!">
         </form>
