@@ -1,11 +1,11 @@
 
 -- -----------------------------------------------------
-USE `e2295331` ;
+USE `ecolemagie` ;
 
 -- -----------------------------------------------------
--- Table `e2295331`.`ecole`
+-- Table `ecolemagie`.`ecole`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `e2295331`.`ecole` (
+CREATE TABLE IF NOT EXISTS `ecolemagie`.`ecole` (
   `ecoleId` INT NOT NULL AUTO_INCREMENT,
   `ecoleNom` VARCHAR(45) NOT NULL,
   `ecoleDateFondation` DATE NOT NULL,
@@ -14,21 +14,39 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `e2295331`.`poste`
+-- Table `ecolemagie`.`poste`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `e2295331`.`poste` (
+CREATE TABLE IF NOT EXISTS `ecolemagie`.`poste` (
   `posteId` INT NOT NULL AUTO_INCREMENT,
   `posteNom` VARCHAR(45) NOT NULL,
   `posteDescription` TEXT NULL,
+  INDEX `fk_employe_privilege1_idx` (`employePrivilegeId` ASC),
+  CONSTRAINT `fk_employe_privilege1_idx`
+    FOREIGN KEY (`employePrivilegeId`)
+    REFERENCES `ecolemagie`.`privilege` (`privilegeId`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
   PRIMARY KEY (`posteId`))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `e2295331`.`employe`
+-- Table `ecolemagie`.`privilege`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `e2295331`.`employe` (
+CREATE TABLE IF NOT EXISTS `ecolemagie`.`privilege` (
+  `privilegeId` INT NOT NULL,
+  `privilege` VARCHAR(45),
+  PRIMARY KEY (`privilegeId`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ecolemagie`.`employe`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ecolemagie`.`employe` (
   `employeId` INT NOT NULL AUTO_INCREMENT,
+  `employeCourriel` VARCHAR(55) NOT NULL,
+  `employeMotDePasse` VARCHAR(255) NOT NULL,
   `employeNom` VARCHAR(45) NOT NULL,
   `employePrenom` VARCHAR(45) NOT NULL,
   `employeDateEmbauche` DATE NOT NULL,
@@ -37,23 +55,41 @@ CREATE TABLE IF NOT EXISTS `e2295331`.`employe` (
   PRIMARY KEY (`employeId`),
   INDEX `fk_employe_ecole de magie1_idx` (`employeEcoleId` ASC),
   INDEX `fk_employe_poste1_idx` (`employePosteId` ASC),
-  CONSTRAINT `fk_employe_ecole de magie1`
+  CONSTRAINT `fk_employe_ecole_de_magie1`
     FOREIGN KEY (`employeEcoleId`)
-    REFERENCES `e2295331`.`ecole` (`ecoleId`)
+    REFERENCES `ecolemagie`.`ecole` (`ecoleId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_employe_poste1`
     FOREIGN KEY (`employePosteId`)
-    REFERENCES `e2295331`.`poste` (`posteId`)
+    REFERENCES `ecolemagie`.`poste` (`posteId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `e2295331`.`cours`
+-- Table `ecolemagie`.`log`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `e2295331`.`cours` (
+CREATE TABLE IF NOT EXISTS `ecolemagie`.`log` (
+  `logId` INT NOT NULL AUTO_INCREMENT,
+  `logAdresseIP` INT NOT NULL,
+  `logDate` DATETIME NOT NULL,
+  `logEmployeId` INT,
+  PRIMARY KEY (`logId`),
+  INDEX `fk_log_employe1_idx` (`logEmployeId` ASC),
+  CONSTRAINT `fk_log_employe1_idx`
+    FOREIGN KEY (`logEmployeId`)
+    REFERENCES `ecolemagie`.`employe` (`employeId`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ecolemagie`.`cours`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ecolemagie`.`cours` (
   `coursId` INT NOT NULL AUTO_INCREMENT,
   `coursNom` VARCHAR(45) NOT NULL,
   `coursDescription` TEXT NULL,
@@ -63,16 +99,16 @@ CREATE TABLE IF NOT EXISTS `e2295331`.`cours` (
   INDEX `fk_cours_employe1_idx` (`coursEmployeId` ASC),
   CONSTRAINT `fk_cours_employe1`
     FOREIGN KEY (`coursEmployeId`)
-    REFERENCES `e2295331`.`employe` (`employeId`)
+    REFERENCES `ecolemagie`.`employe` (`employeId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `e2295331`.`maison`
+-- Table `ecolemagie`.`maison`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `e2295331`.`maison` (
+CREATE TABLE IF NOT EXISTS `ecolemagie`.`maison` (
   `maisonId` INT NOT NULL AUTO_INCREMENT,
   `maisonNom` VARCHAR(45) NOT NULL,
   `maisonEmployeResponsable` INT NOT NULL,
@@ -82,21 +118,21 @@ CREATE TABLE IF NOT EXISTS `e2295331`.`maison` (
   INDEX `fk_Maison_École1_idx` (`maisonEcoleId` ASC),
   CONSTRAINT `fk_Maison_Employé1`
     FOREIGN KEY (`maisonEmployeResponsable`)
-    REFERENCES `e2295331`.`employe` (`employeId`)
+    REFERENCES `ecolemagie`.`employe` (`employeId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Maison_École1`
     FOREIGN KEY (`maisonEcoleId`)
-    REFERENCES `e2295331`.`ecole` (`ecoleId`)
+    REFERENCES `ecolemagie`.`ecole` (`ecoleId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `e2295331`.`etudiants`
+-- Table `ecolemagie`.`etudiants`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `e2295331`.`etudiants` (
+CREATE TABLE IF NOT EXISTS `ecolemagie`.`etudiants` (
   `etudiantId` INT NOT NULL AUTO_INCREMENT,
   `etudiantNom` VARCHAR(45) NOT NULL,
   `etudiantPrenom` VARCHAR(45) NOT NULL,
@@ -109,16 +145,16 @@ CREATE TABLE IF NOT EXISTS `e2295331`.`etudiants` (
   INDEX `fk_etudiants_maison1_idx` (`etudiantMaisonId` ASC),
   CONSTRAINT `fk_etudiants_maison1`
     FOREIGN KEY (`etudiantMaisonId`)
-    REFERENCES `e2295331`.`maison` (`maisonId`)
+    REFERENCES `ecolemagie`.`maison` (`maisonId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `e2295331`.`inscription`
+-- Table `ecolemagie`.`inscription`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `e2295331`.`inscription` (
+CREATE TABLE IF NOT EXISTS `ecolemagie`.`inscription` (
   `inscriptionEtudiantId` INT NOT NULL,
   `inscriptionCoursId` INT NOT NULL,
   `semestre` VARCHAR(5) NULL,
@@ -127,12 +163,12 @@ CREATE TABLE IF NOT EXISTS `e2295331`.`inscription` (
   INDEX `fk_etudiants_has_cours_etudiants_idx` (`inscriptionEtudiantId` ASC),
   CONSTRAINT `fk_etudiants_has_cours_etudiants`
     FOREIGN KEY (`inscriptionEtudiantId`)
-    REFERENCES `e2295331`.`etudiants` (`etudiantId`)
+    REFERENCES `ecolemagie`.`etudiants` (`etudiantId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_etudiants_has_cours_cours1`
     FOREIGN KEY (`inscriptionCoursId`)
-    REFERENCES `e2295331`.`cours` (`coursId`)
+    REFERENCES `ecolemagie`.`cours` (`coursId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -150,7 +186,11 @@ INSERT into poste (posteNom, posteDescription) VALUES ("Directeur", "Aider Harry
 INSERT into poste (posteNom, posteDescription) VALUES ("Professeur", "Enseigner la magie aux enfants et si possible essayer de faire en sorte que la plupart survivent à leur cheminement académique");
 INSERT into poste (posteNom, posteDescription) VALUES ("Aide-cuisinier", "Vous croyez que la bouffe de Poudlard se fait tout seul??");
 
-INSERT INTO employe (employeNom, employePrenom, employeDateEmbauche, employeEcoleId, employePosteId) VALUES ("Dumbledore", "Albus", "1952-04-02", 1, 1);
+INSERT into privilege (privilegeId, privilege) VALUES (1, "Administrateur");
+INSERT into privilege (privilegeId, privilege) VALUES (2, "Employe");
+INSERT into privilege (privilegeId, privilege) VALUES (3, "Visiteur");
+
+INSERT INTO employe (employeCourriel, employeMotDePasse, employeNom, employePrenom, employeDateEmbauche, employeEcoleId, employePosteId, employePrivilegeId) VALUES ("adumb@me.com", "123", "Dumbledore", "Albus", "1952-04-02", 1, 1, 1);
 
 INSERT into cours (coursNom, coursDescription, coursNiveau) VALUES ("Défense contre les forces du mal 1", "Enseigner un ou deux sorts utile", 1);
 INSERT into cours (coursNom, coursDescription, coursNiveau, coursEmployeId) VALUES ("Potion 3", "Préparer des potions, duh", 3, 1);

@@ -4,7 +4,7 @@ class ModelEmploye extends Crud {
 
     protected $table = 'employe';
     protected $primaryKey = 'employeId';
-    protected $fillable = ['employeId', 'employeNom', 'employePrenom', 'employeCourriel', 'employeMotDePasse', 'employeDateEmbauche', 'employeEcoleId', 'employePosteId'];
+    protected $fillable = ['employeCourriel', 'employeMotDePasse', 'employeId', 'employeNom', 'employePrenom', 'employeCourriel', 'employeMotDePasse', 'employeDateEmbauche', 'employeEcoleId', 'employePosteId'];
 
     // Pour créer un régistre avec (double) join
     public function selectDoubleJoin($table2, $table3, $field1, $field2, $field3, $field4, $champOrdre, $ordre='ASC'){
@@ -29,18 +29,20 @@ class ModelEmploye extends Crud {
 
     public function checkEmploye($data){
         extract($data);
-        $sql = "SELECT * FROM $this->table WHERE courriel = ?";
+        $sql = "SELECT * FROM $this->table
+                         LEFT JOIN poste ON employePosteId = posteId
+                         WHERE courriel = ?";
         $stmt = $this->prepare($sql);
-        $stmt->execute(array($username));
+        $stmt->execute(array($employe_courriel));
         $count = $stmt->rowCount();
         if($count == 1){
             $employe_info = $stmt->fetch();
-            if(password_verify($password, $employe_info['password'])){
+            if(password_verify($employe_mot_de_passe, $employe_info['employeMotDePasse'])){
                     
                 session_regenerate_id();
                 // c'est ici qu'on pourrait faire un "salut"
-                $_SESSION['employe_id'] = $employe_info['id'];
-                $_SESSION['privilege_id'] = $employe_info['privilege_id'];
+                $_SESSION['employe_id'] = $employe_info['employeId'];
+                $_SESSION['privilege_id'] = $employe_info['postePrivilegeId'];
                 $_SESSION['fingerPrint'] = md5($_SERVER['HTTP_USER_AGENT'] . $_SERVER['REMOTE_ADDR']);
                 
                 requirePage::redirectPage('employe');
