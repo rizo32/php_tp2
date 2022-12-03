@@ -7,6 +7,7 @@ class ControllerEmploye{
 
     // Pour afficher le registre d'employés
     public function index(){
+        CheckSession::sessionAuth();
         $employe = new ModelEmploye;
         // L'index fait intervenir des données de trois tables: employe, poste, ecole
         // Méthode du modele employé
@@ -19,18 +20,19 @@ class ControllerEmploye{
         /* do I have to create new Model everytime?? */
         $employe = new ModelEmploye;
         $employeMotDePasse = $employe->generationMotDePasse();
-       twig::render('employe-create.php', ['privileges' => $selectPrivilege]);
+        twig::render('employe-create.php');
+        //    twig::render('employe-create.php', ['privileges' => $selectPrivilege]);
     }
 
     // Pour insérer les employés dans la base de données
     public function store(){
         $validation = new Validation;
         extract($_POST);
-        $validation->name('nom')->value($nom)->pattern('alpha')->required()->max(45);
+        $validation->name('nom')->value($employeNom)->pattern('alpha')->required()->max(45);
         // ne regarde pas si le nom est le même, seulement si ça fit le format
-        $validation->name('username')->value($username)->pattern('email')->required()->max(50);
-        $validation->name('password')->value($password)->max(20)->min(6);
-        $validation->name('privilege_id')->value($privilege_id)->pattern('int')->required();
+        $validation->name('employeCourriel')->value($employeCourriel)->pattern('email')->required()->max(50);
+        $validation->name('employeMotDePasse')->value($employeMotDePasse)->max(20)->min(6);
+        // $validation->name('privilege_id')->value($privilege_id)->pattern('int')->required();
 
         if($validation->isSuccess()){
             $employe = new ModelEmploye;
@@ -38,7 +40,7 @@ class ControllerEmploye{
                 // Parce que je suis suiveux
                 'cost' => 10,
             ];
-            $_POST['password']= password_hash($_POST['password'], PASSWORD_BCRYPT, $options);
+            $_POST['employeMotDePasse']= password_hash($_POST['employeMotDePasse'], PASSWORD_BCRYPT, $options);
             // Pour ajouter la date d'aujourd'hui comme date d'embauche sans passer par le formulaire
             $_POST['employeDateEmbauche'] = (new DateTime())->format('Y-m-d');
             $insert = $employe->insert($_POST);
@@ -46,8 +48,9 @@ class ControllerEmploye{
         }else{
             $errors = $validation->displayErrors();
             $privilege = new ModelPrivilege;
-            $selectPrivilege = $privilege->select();
-            twig::render('employe-create.php', ['errors' => $errors,'privileges' => $selectPrivilege, 'employe' => $_POST]);
+            // $selectPrivilege = $privilege->select();
+            twig::render('employe-create.php', ['errors' => $errors, 'employe' => $_POST]);
+            // twig::render('employe-create.php', ['errors' => $errors,'privileges' => $selectPrivilege, 'employe' => $_POST]);
         }
     }
 
@@ -58,15 +61,17 @@ class ControllerEmploye{
     public function auth(){
         $validation = new Validation;
         extract($_POST);
-        $validation->name('username')->value($username)->pattern('email')->required()->max(50);
-        $validation->name('password')->value($password)->required();
+        $validation->name('employeCourriel')->value($employeCourriel)->pattern('email')->required()->max(50);
+        $validation->name('employeMotDePasse')->value($employeMotDePasse)->required();
 
         if($validation->isSuccess()){
 
             $employe = new ModelEmploye;
             $checkEmploye = $employe->checkEmploye($_POST);
             
-            twig::render('employe-login.php', ['errors' => $checkEmploye, 'user' => $_POST]);
+
+            twig::render('home-index.php', ['errors' => $checkEmploye, 'employe' => $employe]);
+            // twig::render('employe-login.php', ['errors' => $checkEmploye, 'employe' => $_POST]);
         
         }else{
             $errors = $validation->displayErrors();

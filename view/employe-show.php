@@ -1,9 +1,10 @@
 {{ include('header.php', {title: 'Votre compte'}) }}
 
 <main>
+    <p><strong>Courriel :</strong>{{ employe.employeCourriel }}</p>
     <p><strong>Nom :</strong>{{ employe.employeNom }}</p>
     <p><strong>Prénom :</strong>{{ employe.employePrenom }}</p>
-    <p><strong>Courriel :</strong>{{ employe.employeCourriel }}</p>
+    <p><strong>Mot de passe :</strong>{{ employe.employeMotDePasse }}</p>
     <p><strong>Poste :</strong>{{ employe.posteNom }}</p>
     <p><strong>Date d'embauche : </strong>{{ employe.employeDateEmbauche }}</p>
     <p><strong>École : </strong>{{ employe.ecoleNom }}</p>

@@ -4,6 +4,7 @@
     <table>
         <thead>
             <tr>
+                <th>Courriel</th>
                 <th>Nom</th>
                 <th>Prénom</th>
                 <th>Poste</th>
@@ -14,6 +15,7 @@
         <tbody>
                 {% for employe in employes %}
                 <tr>
+                    <td>{{ employe.employeCourriel }}</td>
                     <td>{{ employe.employeNom }}</td>
                     <td>{{ employe.employePrenom }}</td>
                     <td>{{ employe.posteNom }}</td>

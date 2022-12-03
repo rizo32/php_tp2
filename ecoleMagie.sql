@@ -14,29 +14,30 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `ecolemagie`.`poste`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ecolemagie`.`poste` (
-  `posteId` INT NOT NULL AUTO_INCREMENT,
-  `posteNom` VARCHAR(45) NOT NULL,
-  `posteDescription` TEXT NULL,
-  INDEX `fk_employe_privilege1_idx` (`employePrivilegeId` ASC),
-  CONSTRAINT `fk_employe_privilege1_idx`
-    FOREIGN KEY (`employePrivilegeId`)
-    REFERENCES `ecolemagie`.`privilege` (`privilegeId`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  PRIMARY KEY (`posteId`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `ecolemagie`.`privilege`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ecolemagie`.`privilege` (
   `privilegeId` INT NOT NULL,
   `privilege` VARCHAR(45),
   PRIMARY KEY (`privilegeId`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ecolemagie`.`poste`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ecolemagie`.`poste` (
+  `posteId` INT NOT NULL AUTO_INCREMENT,
+  `posteNom` VARCHAR(45) NOT NULL,
+  `posteDescription` TEXT NULL,
+  `postePrivilegeId` INT NOT NULL,
+  INDEX `fk_poste_privilege1_idx` (`postePrivilegeId` ASC),
+  CONSTRAINT `fk_poste_privilege1_idx`
+    FOREIGN KEY (`postePrivilegeId`)
+    REFERENCES `ecolemagie`.`privilege` (`privilegeId`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  PRIMARY KEY (`posteId`))
 ENGINE = InnoDB;
 
 
@@ -182,15 +183,15 @@ INSERT into ecole (ecoleNom, ecoleDateFondation) VALUES ("Mahoutokoro School of 
 INSERT into ecole (ecoleNom, ecoleDateFondation) VALUES ("Uagadou School of Magic", "1566-09-05");
 INSERT into ecole (ecoleNom, ecoleDateFondation) VALUES ("Koldovstoretz", "1896-08-05");
 
-INSERT into poste (posteNom, posteDescription) VALUES ("Directeur", "Aider Harry Potter à vaincre Voldemort, mais pas trop");
-INSERT into poste (posteNom, posteDescription) VALUES ("Professeur", "Enseigner la magie aux enfants et si possible essayer de faire en sorte que la plupart survivent à leur cheminement académique");
-INSERT into poste (posteNom, posteDescription) VALUES ("Aide-cuisinier", "Vous croyez que la bouffe de Poudlard se fait tout seul??");
-
 INSERT into privilege (privilegeId, privilege) VALUES (1, "Administrateur");
 INSERT into privilege (privilegeId, privilege) VALUES (2, "Employe");
 INSERT into privilege (privilegeId, privilege) VALUES (3, "Visiteur");
 
-INSERT INTO employe (employeCourriel, employeMotDePasse, employeNom, employePrenom, employeDateEmbauche, employeEcoleId, employePosteId, employePrivilegeId) VALUES ("adumb@me.com", "123", "Dumbledore", "Albus", "1952-04-02", 1, 1, 1);
+INSERT into poste (posteNom, posteDescription, postePrivilegeId) VALUES ("Directeur", "Aider Harry Potter à vaincre Voldemort, mais pas trop", 1);
+INSERT into poste (posteNom, posteDescription, postePrivilegeId) VALUES ("Professeur", "Enseigner la magie aux enfants et si possible essayer de faire en sorte que la plupart survivent à leur cheminement académique", 2);
+INSERT into poste (posteNom, posteDescription, postePrivilegeId) VALUES ("Aide-cuisinier", "Vous croyez que la bouffe de Poudlard se fait tout seul??", 2);
+
+INSERT INTO employe (employeCourriel, employeMotDePasse, employeNom, employePrenom, employeDateEmbauche, employeEcoleId, employePosteId) VALUES ("adumb@me.com", "123", "Dumbledore", "Albus", "1952-04-02", 1, 1);
 
 INSERT into cours (coursNom, coursDescription, coursNiveau) VALUES ("Défense contre les forces du mal 1", "Enseigner un ou deux sorts utile", 1);
 INSERT into cours (coursNom, coursDescription, coursNiveau, coursEmployeId) VALUES ("Potion 3", "Préparer des potions, duh", 3, 1);

@@ -4,7 +4,7 @@ class ModelEmploye extends Crud {
 
     protected $table = 'employe';
     protected $primaryKey = 'employeId';
-    protected $fillable = ['employeCourriel', 'employeMotDePasse', 'employeId', 'employeNom', 'employePrenom', 'employeCourriel', 'employeMotDePasse', 'employeDateEmbauche', 'employeEcoleId', 'employePosteId'];
+    protected $fillable = ['employeCourriel', 'employeMotDePasse', 'employeId', 'employeNom', 'employePrenom', 'employeMotDePasse', 'employeDateEmbauche', 'employeEcoleId', 'employePosteId'];
 
     // Pour créer un régistre avec (double) join
     public function selectDoubleJoin($table2, $table3, $field1, $field2, $field3, $field4, $champOrdre, $ordre='ASC'){
@@ -31,21 +31,23 @@ class ModelEmploye extends Crud {
         extract($data);
         $sql = "SELECT * FROM $this->table
                          LEFT JOIN poste ON employePosteId = posteId
-                         WHERE courriel = ?";
+                         WHERE employeCourriel = ?";
         $stmt = $this->prepare($sql);
-        $stmt->execute(array($employe_courriel));
+        $stmt->execute(array($employeCourriel));
         $count = $stmt->rowCount();
         if($count == 1){
-            $employe_info = $stmt->fetch();
-            if(password_verify($employe_mot_de_passe, $employe_info['employeMotDePasse'])){
+            $employeInfo = $stmt->fetch();
+            if(password_verify($employeMotDePasse, $employeInfo['employeMotDePasse'])){
                     
-                session_regenerate_id();
+                // session_regenerate_id();
                 // c'est ici qu'on pourrait faire un "salut"
-                $_SESSION['employe_id'] = $employe_info['employeId'];
-                $_SESSION['privilege_id'] = $employe_info['postePrivilegeId'];
+                $_SESSION['employePrenom'] = $employeInfo['employePrenom'];
+                $_SESSION['employeId'] = $employeInfo['employeId'];
+                $_SESSION['privilegeId'] = $employeInfo['postePrivilegeId'];
                 $_SESSION['fingerPrint'] = md5($_SERVER['HTTP_USER_AGENT'] . $_SERVER['REMOTE_ADDR']);
+
                 
-                requirePage::redirectPage('employe');
+                // requirePage::redirectPage('employe');
                 
             }else{
                return "<ul><li>Verifier le mot de passe</li></ul>";  

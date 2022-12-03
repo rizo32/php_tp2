@@ -10,12 +10,19 @@
 </head>
 <body>
     <nav>
-            <a href="{{ path }}">Accueil</a>
+        {% if guest %}
+            <p>Enchanté!</p>
+        {% else %}
+            <p>Salut {{ session.employePrenom }}!</p>
+        {% endif %}
 
-        <a href="{{ path }}employe/index">Registre du personnel (emp)</a>
-        {# {% if session.privilege_id == 1 %} #}
-            <a href="{{ path }}employe/create">Embauche (dum)</a>
-        {# {% endif %}  #}
+
+        <a href="{{ path }}">Accueil</a>
+
+        <a href="{{ path }}employe/index">Registre du personnel</a>
+        {% if session.privilegeId == 1 %}
+            <a href="{{ path }}employe/create">Embauche</a>
+        {% endif %}
         {% if guest %}
             <a href = "{{ path }}employe/login">Login</a>
         {% else %}
