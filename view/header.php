@@ -14,6 +14,7 @@
             <p>Enchanté!</p>
         {% else %}
             <p>Salut {{ session.employePrenom }}!</p>
+            <p>Salut {{ session.privilegeId }}!</p>
         {% endif %}
 
 

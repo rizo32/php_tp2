@@ -13,7 +13,7 @@
         </label>
         <label>Poste
         <select name="employePosteId">
-            <option value=1>Admin</option>
+            <!-- <option value=1>Directeur</option> -->
             <option value=2>Professeur</option>
             <option value=3>Aide-cuisinier</option>
         </select></label>

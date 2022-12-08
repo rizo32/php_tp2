@@ -17,11 +17,23 @@ class ControllerEmploye{
 
     // Pour afficher la page de création d'employés
     public function create(){
+        CheckSession::sessionAuth();
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if ($_SESSION['privilegeId'] == 1){
+            $privilege = new ModelPrivilege;
+            $selectPrivilege = $privilege->select('privilegeId');
+            twig::render('employe-create.php', ['privileges' => $selectPrivilege]);
+        }else{
+            requirePage::redirectPage('home/error');
+        }
+
         /* do I have to create new Model everytime?? */
-        $employe = new ModelEmploye;
-        $employeMotDePasse = $employe->generationMotDePasse();
-        twig::render('employe-create.php');
-        //    twig::render('employe-create.php', ['privileges' => $selectPrivilege]);
+        // $employe = new ModelEmploye;
+        // $employeMotDePasse = $employe->generationMotDePasse();
     }
 
     // Pour insérer les employés dans la base de données
@@ -48,9 +60,9 @@ class ControllerEmploye{
         }else{
             $errors = $validation->displayErrors();
             $privilege = new ModelPrivilege;
-            // $selectPrivilege = $privilege->select();
-            twig::render('employe-create.php', ['errors' => $errors, 'employe' => $_POST]);
-            // twig::render('employe-create.php', ['errors' => $errors,'privileges' => $selectPrivilege, 'employe' => $_POST]);
+            $selectPrivilege = $privilege->select();
+            twig::render('employe-create.php', ['errors' => $errors,'privileges' => $selectPrivilege, 'employe' => $_POST]);
+            // twig::render('employe-create.php', ['errors' => $errors, 'employe' => $_POST]);
         }
     }
 
@@ -65,12 +77,13 @@ class ControllerEmploye{
         $validation->name('employeMotDePasse')->value($employeMotDePasse)->required();
 
         if($validation->isSuccess()){
+            session_start();
 
             $employe = new ModelEmploye;
             $checkEmploye = $employe->checkEmploye($_POST);
             
 
-            twig::render('home-index.php', ['errors' => $checkEmploye, 'employe' => $employe]);
+            twig::render('home-index.php', ['errors' => $checkEmploye]);
             // twig::render('employe-login.php', ['errors' => $checkEmploye, 'employe' => $_POST]);
         
         }else{
@@ -81,6 +94,17 @@ class ControllerEmploye{
 
 
     public function logout(){
+        // If it's desired to kill the session, also delete the session cookie.
+        // Note: This will destroy the session, and not just the session data!
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000,
+                $params["path"], $params["domain"],
+                $params["secure"], $params["httponly"]
+            );
+        }
+
+
         session_destroy();
         requirePage::redirectPage('employe/login');
     }
