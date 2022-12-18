@@ -42,9 +42,11 @@ class ModelEmploye extends Crud {
                 // session_regenerate_id();
                 // c'est ici qu'on pourrait faire un "salut"
                 $_SESSION['employePrenom'] = $employeInfo['employePrenom'];
+                $_SESSION['employeNom'] = $employeInfo['employeNom'];
                 $_SESSION['employeId'] = $employeInfo['employeId'];
                 $_SESSION['privilegeId'] = $employeInfo['postePrivilegeId'];
                 $_SESSION['fingerPrint'] = md5($_SERVER['HTTP_USER_AGENT'] . $_SERVER['REMOTE_ADDR']);
+                // $_SESSION['logAdresseIP'] = $_SERVER['REMOTE_ADDR'];
 
                 
                 // requirePage::redirectPage('employe');

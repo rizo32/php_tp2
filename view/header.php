@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,20 +10,18 @@
 </head>
 <body>
     <nav>
-        {% if guest %}
-            <p>Enchanté!</p>
-        {% else %}
-            <p>Salut {{ session.employePrenom }}!</p>
-            <p>Salut {{ session.privilegeId }}!</p>
-        {% endif %}
-
-
         <a href="{{ path }}">Accueil</a>
 
         <a href="{{ path }}employe/index">Registre du personnel</a>
-        {% if session.privilegeId == 1 %}
-            <a href="{{ path }}employe/create">Embauche</a>
+
+        {% if(session.privilegeId == 1) or (session.privilegeId == 2) %}
+        <a href="{{ path }}employe/create">Embauche</a>
         {% endif %}
+
+        {% if(session.privilegeId == 1) %}
+        <a href="{{ path }}log">Journal de bord</a>
+        {% endif %}
+
         {% if guest %}
             <a href = "{{ path }}employe/login">Login</a>
         {% else %}
@@ -31,12 +29,37 @@
         {% endif %}
     </nav>
     <header>
-       <h1>{{ pageHeader }}</h1>
+        <h1>{{ pageHeader }}</h1>
+        {% if guest %}
+            <p>Bienvenue!</p>
+
+        {% elseif(session.privilegeId == 1) %}
+        <p>Bonjour Monsieur {{ session.employeNom }}</p>
+        <p>privilege: {{ session.privilegeId }}</p>
+
+        {% elseif(session.privilegeId == 2) %}
+        <p>Salut {{ session.employePrenom }}!</p>
+        <p>privilege: {{ session.privilegeId }}</p>
+
+        {% elseif(session.privilegeId == 3) %}
+        <p>Retournez vite travaillez, {{ session.employePrenom }}!!</p>
+        <p>privilege: {{ session.privilegeId }}</p>
+
+        {% endif %}    
     </header>
 
     <aside>
+        <form action="{{ path }}log/store" method="post">
+            <!-- <input type="hidden" name="logAdresseIP" value= "{{ session.logAdresseIP }}"> -->
+            <!-- <input type="hidden" name="logDate" value= "{{ session.logDate }}"> -->
+            <!-- {% if session.employeId %}
+                <input type="hidden" name="logEmployeId" value= "{{ session.employeId }}">
+            {% endif %}     -->
+        </form>
+
+
+
         {% if errors is defined %}
             <span class="error">{{ errors | raw}}</span>
         {% endif %}
-
     </aside>

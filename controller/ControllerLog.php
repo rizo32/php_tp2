@@ -1,10 +1,23 @@
 <?php
+RequirePage::requireModel('Crud');
+RequirePage::requireModel('ModelLog');
 
-class ModelLog extends Crud {
+class ControllerLog{
 
-    protected $table = 'log';
-    protected $primaryKey = 'logId';
-    protected $fillable = ['logId', 'logAdresseIP', 'logDate', 'logEmployeId', 'logPage'];
+    // Pour afficher le registre de Log
+    public function index(){
+        CheckSession::sessionAuth();
+        if ($_SESSION['privilegeId'] == 1){
+            $log = new ModelLog;
+            // L'index fait intervenir des données de trois tables: employe, poste, ecole
+            // Méthode du modele employé
+            $select = $log->selectIdJoin('employe', 'logEmployeId', 'employeId');
+            twig::render("log-index.php", ['logs' => $select]);
+        }else{
+            requirePage::redirectPage('home/error');
+        }
+    }
+
 
     // Pour insérer les employés dans la base de données
     public function store(){
@@ -22,37 +35,18 @@ class ModelLog extends Crud {
                 'cost' => 10,
             ];
             // Pour ajouter la date d'aujourd'hui comme date d'embauche sans passer par le formulaire
-            $tz = 'America/Toronto';
-            $timestamp = time();
-            $dt = new DateTime("now", new DateTimeZone($tz));
-            $dt->setTimestamp($timestamp);
-
-            $_POST['logDate'] = ($dt)->format('Y-m-d H:i:s');
+            $_POST['logDate'] = (new DateTime())->format('Y-m-d');
 
             $_POST['logAdresseIP'] = $_SERVER['REMOTE_ADDR'];
 
-            if(isset($_SESSION['employeId'])){
+            if($_SESSION['employeId']){
                 $_POST['logEmployeId'] = $_SESSION['employeId'];
             }
-
-            if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'){
-                $url = "https://";   
-            } else {
-                $url = "http://";   
-            }
-            // Append the host(domain name, ip) to the URL.   
-            $url.= $_SERVER['HTTP_HOST'];   
-    
-            // Append the requested resource location to the URL   
-            $url.= $_SERVER['REQUEST_URI'];    
-
-            $_POST['logPage'] = $url;
-
             $insert = $log->insert($_POST);
         // }else{
         //     $errors = $validation->displayErrors();
         // }
     }
-}
 
+}
 ?>

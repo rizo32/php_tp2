@@ -1,6 +1,5 @@
-{{ include('header.php', {title: 'Création employés'}) }}
+{{ include('header.php', {title: 'Index des employés', pageHeader: 'Voici votre équipe'}) }}
 <main>
-    <h1>Voici votre équipe</h1>
     <table>
         <thead>
             <tr>
@@ -21,7 +20,9 @@
                     <td>{{ employe.posteNom }}</td>
                     <td>{{ employe.employeDateEmbauche }}</td>
                     <td>{{ employe.ecoleNom }}</td>
+                    {%  if session.privilegeId == 1 %}
                     <td><a href="{{ path }}employe/show/{{ employe.employeId }}">Modifier</a></td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
         </tbody>

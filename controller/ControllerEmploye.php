@@ -1,5 +1,6 @@
 <?php
 RequirePage::requireModel('Crud');
+RequirePage::requireModel('ModelLog');
 RequirePage::requireModel('ModelEmploye');
 RequirePage::requireModel('ModelPrivilege');
 
@@ -8,6 +9,8 @@ class ControllerEmploye{
     // Pour afficher le registre d'employés
     public function index(){
         CheckSession::sessionAuth();
+        $log = new ModelLog;
+        $log->store();
         $employe = new ModelEmploye;
         // L'index fait intervenir des données de trois tables: employe, poste, ecole
         // Méthode du modele employé
@@ -18,12 +21,10 @@ class ControllerEmploye{
     // Pour afficher la page de création d'employés
     public function create(){
         CheckSession::sessionAuth();
+        $log = new ModelLog;
+        $log->store();
 
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if ($_SESSION['privilegeId'] == 1){
+        if ($_SESSION['privilegeId'] == 1 || $_SESSION['privilegeId'] == 2){
             $privilege = new ModelPrivilege;
             $selectPrivilege = $privilege->select('privilegeId');
             twig::render('employe-create.php', ['privileges' => $selectPrivilege]);
@@ -31,13 +32,19 @@ class ControllerEmploye{
             requirePage::redirectPage('home/error');
         }
 
-        /* do I have to create new Model everytime?? */
         // $employe = new ModelEmploye;
         // $employeMotDePasse = $employe->generationMotDePasse();
     }
 
     // Pour insérer les employés dans la base de données
     public function store(){
+        $log = new ModelLog;
+        $log->store();
+
+        if($_SESSION['privilegeId']==2){
+            $_POST['employePosteId'] = 3; 
+        }
+
         $validation = new Validation;
         extract($_POST);
         $validation->name('nom')->value($employeNom)->pattern('alpha')->required()->max(45);
@@ -49,24 +56,31 @@ class ControllerEmploye{
         if($validation->isSuccess()){
             $employe = new ModelEmploye;
             $options = [
-                // Parce que je suis suiveux
                 'cost' => 10,
             ];
             $_POST['employeMotDePasse']= password_hash($_POST['employeMotDePasse'], PASSWORD_BCRYPT, $options);
             // Pour ajouter la date d'aujourd'hui comme date d'embauche sans passer par le formulaire
-            $_POST['employeDateEmbauche'] = (new DateTime())->format('Y-m-d');
+            $tz = 'America/Toronto';
+            $timestamp = time();
+            $dt = new DateTime("now", new DateTimeZone($tz));
+            $dt->setTimestamp($timestamp);
+
+            $_POST['employeDateEmbauche'] = $dt->format('Y-m-d');
             $insert = $employe->insert($_POST);
             requirePage::redirectPage('employe');
         }else{
             $errors = $validation->displayErrors();
-            $privilege = new ModelPrivilege;
-            $selectPrivilege = $privilege->select();
-            twig::render('employe-create.php', ['errors' => $errors,'privileges' => $selectPrivilege, 'employe' => $_POST]);
-            // twig::render('employe-create.php', ['errors' => $errors, 'employe' => $_POST]);
+            // $privilege = new ModelPrivilege;
+            // $selectPrivilege = $privilege->select();
+            // twig::render('employe-create.php', ['errors' => $errors,'privileges' => $selectPrivilege, 'employe' => $_POST]);
+            twig::render('employe-create.php', ['errors' => $errors, 'employe' => $_POST]);
         }
     }
 
     public function login(){
+        $log = new ModelLog;
+        $log->store();
+
         twig::render('employe-login.php');
     }
 
@@ -77,7 +91,7 @@ class ControllerEmploye{
         $validation->name('employeMotDePasse')->value($employeMotDePasse)->required();
 
         if($validation->isSuccess()){
-            session_start();
+            // session_start();
 
             $employe = new ModelEmploye;
             $checkEmploye = $employe->checkEmploye($_POST);
@@ -96,13 +110,13 @@ class ControllerEmploye{
     public function logout(){
         // If it's desired to kill the session, also delete the session cookie.
         // Note: This will destroy the session, and not just the session data!
-        if (ini_get("session.use_cookies")) {
-            $params = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 42000,
-                $params["path"], $params["domain"],
-                $params["secure"], $params["httponly"]
-            );
-        }
+        // if (ini_get("session.use_cookies")) {
+        //     $params = session_get_cookie_params();
+        //     setcookie(session_name(), '', time() - 42000,
+        //         $params["path"], $params["domain"],
+        //         $params["secure"], $params["httponly"]
+        //     );
+        // }
 
 
         session_destroy();
@@ -112,6 +126,9 @@ class ControllerEmploye{
 
     // Fait intervenir des données de trois tables: employe, poste, ecole
     public function show($employeId){
+        $log = new ModelLog;
+        $log->store();
+
         $employe = new ModelEmploye;
         $selectEmploye = $employe->selectIdJoin($employeId, 'poste', 'ecole', 'employePosteId', 'posteId', 'employeEcoleId', 'ecoleId');
         twig::render('employe-show.php', ['employe' => $selectEmploye]);
@@ -119,13 +136,28 @@ class ControllerEmploye{
 
     // Pour afficher la page de modification d'employé
     public function edit($employeId){
-        $employe = new ModelEmploye;
-        $selectEmploye = $employe->selectId($employeId);
-        twig::render('employe-edit.php', ['employe' => $selectEmploye]);
+        $log = new ModelLog;
+        $log->store();
+
+        CheckSession::sessionAuth();
+
+        // Vérifier que les privilges sont bien respectés
+        if ($_SESSION['privilegeId'] == 1){
+            $privilege = new ModelPrivilege;
+            $selectPrivilege = $privilege->select('privilegeId');
+            $employe = new ModelEmploye;
+            $selectEmploye = $employe->selectId($employeId);
+            twig::render('employe-edit.php', ['employe' => $selectEmploye], ['privileges' => $selectPrivilege]);
+        }else{
+            requirePage::redirectPage('home/error');
+        }
     }
 
     // Pour modifier les information d'un employé précis
     public function update(){
+        $log = new ModelLog;
+        $log->store();
+
         $employe = new ModelEmploye;
         $update = $employe->update($_POST);
         RequirePage::redirectPage('employe/show/'.$_POST['employeId']);

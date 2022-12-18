@@ -7,6 +7,14 @@
     --theme: hsl(288, 68%, 21%);
 }
 
+p {
+    margin: 0;
+}
+
+.show p {
+    margin-bottom: 1em;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -31,8 +39,21 @@ h1, h2, h3, h4, input, select, a {
     text-align: center;
 }
 
-h1, h2, h3, h4 {
+h2, h3, h4 {
     margin-bottom: 80px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+header {
+    width: 90vw;
+    text-align: center;
+}
+
+header p {
+    color: var(--light-blue);
 }
 
 a {
@@ -55,7 +76,8 @@ form {
 nav {
     display: flex;
     justify-content: space-around;
-    width: 50%;
+    align-items: center;
+    width: 80%;
 }
 
 input[type='submit'], label {
@@ -106,8 +128,9 @@ img {
 
 img.grosse-img {
     height: 680px;
-    object-fit: contain;
+    object-fit: cover;
     width: 680px;
+    margin-top: -80px;
 }
 
 p a {

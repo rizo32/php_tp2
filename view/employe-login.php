@@ -1,4 +1,4 @@
-{{ include('header.php', {title: 'Login'}) }}
+{{ include('header.php', {title: 'Login', pageHeader: 'Connectez-vous'}) }}
 
 <main>
     <form action="{{ path }}employe/auth" method="post">

@@ -30,11 +30,9 @@ abstract class Crud extends PDO {
     }
 
     // Pour acquérir des informations provenant d'une instance
-    public function selectIdJoin($value, $table2, $table3, $field1, $field2, $field3, $field4){
+    public function selectIdJoin($table2, $field1, $field2){
         $sql = "SELECT * FROM $this->table
-                         LEFT JOIN $table2 ON $field1 = $field2
-                         LEFT JOIN $table3 ON $field3 = $field4       
-                WHERE $this->primaryKey = :$this->primaryKey";
+                         LEFT JOIN $table2 ON $field1 = $field2";
         $stmt = $this->prepare($sql);
         $stmt->bindValue(":$this->primaryKey", $value);
         $stmt->execute();
@@ -45,6 +43,16 @@ abstract class Crud extends PDO {
             header("location: ../../home/error");
         }
     }
+
+        // Pour créer un régistre avec (double) join
+        public function selectDoubleJoin($table2, $table3, $field1, $field2, $field3, $field4, $champOrdre, $ordre='ASC'){
+            $sql = "SELECT * FROM $this->table
+                                LEFT JOIN $table2 ON $field1 = $field2
+                                LEFT JOIN $table3 ON $field3 = $field4
+                    ORDER BY $champOrdre $ordre";
+            $stmt  = $this->query($sql);
+            return  $stmt->fetchAll();
+        }
 
     // Pour créer une nouvelle instance
     public function insert($data){

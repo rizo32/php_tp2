@@ -19,12 +19,19 @@ if($url == '/'){
     $requestURL = ucfirst($requestURL);
     $controllerPath = __DIR__.'/controller/Controller'.$requestURL.'.php';
 
+    $requestURL2 = $url[1];
+    $requestURL2 = ucfirst($requestURL2);
+    $controllerPath = __DIR__.'/controller/Controller'.$requestURL.'.php';
+
     if(file_exists($controllerPath)){
         require_once($controllerPath);
         $controllerName = 'Controller'.$requestURL;
         $controller = new $controllerName;
         if(isset($url[1])){
                 $method = $url[1];
+                if(!method_exists($controller, $method)){
+                    requirePage::redirectPage('home/error');
+                }
                 if(isset($url[2])){
                     $value = $url[2];
                     echo $controller->$method($value);
@@ -36,9 +43,7 @@ if($url == '/'){
         }
         
     }else{
-        require_once 'controller/ControllerHome.php';
-        $controller = new ControllerHome;
-        echo $controller->error();
+        requirePage::redirectPage('home/error');
     }
 }
 

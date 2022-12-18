@@ -1,7 +1,6 @@
-{{ include('header.php', {title: 'Modification'}) }}
+{{ include('header.php', {title: 'Modification', pageHeader: 'Changez votre identité!'}) }}
 
 <main>
-    <h2>Changez votre identité!</h2>
     <form action="{{ path }}employe/update" method="post">
         <input type="hidden" name="employeId" value={{ employe.employeId }}>
         <label>Nom 
