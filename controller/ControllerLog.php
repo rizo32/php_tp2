@@ -11,7 +11,7 @@ class ControllerLog{
             $log = new ModelLog;
             // L'index fait intervenir des données de trois tables: employe, poste, ecole
             // Méthode du modele employé
-            $select = $log->selectIdJoin('employe', 'logEmployeId', 'employeId');
+            $select = $log->selectJoin('logId', 'employe', 'logEmployeId', 'employeId');
             twig::render("log-index.php", ['logs' => $select]);
         }else{
             requirePage::redirectPage('home/error');

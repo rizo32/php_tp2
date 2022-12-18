@@ -14,6 +14,16 @@ abstract class Crud extends PDO {
         return  $stmt->fetchAll();
     }
 
+    
+    // Pour acquérir des informations provenant d'une instance
+    public function selectJoin($value, $table2, $field1, $field2){
+        $sql = "SELECT * FROM $this->table
+                         LEFT JOIN $table2 ON $field1 = $field2
+                         ORDER BY $value DESC";
+        $stmt  = $this->query($sql);
+        return $stmt->fetchAll();
+    }
+
     // Pour acquérir des informations provenant d'une instance
     public function selectId($value){
         $sql = "SELECT * FROM $this->table
@@ -25,7 +35,7 @@ abstract class Crud extends PDO {
         if($count == 1 ){
             return $stmt->fetch();
         }else{
-            header("location: ../../home/error");
+            header("location: home/error");
         }
     }
 
@@ -40,7 +50,7 @@ abstract class Crud extends PDO {
         if($count == 1 ){
             return $stmt->fetch();
         }else{
-            header("location: ../../home/error");
+            header("location: home/error");
         }
     }
 

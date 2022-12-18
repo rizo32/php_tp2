@@ -19,7 +19,7 @@
         {% endif %}
 
         {% if(session.privilegeId == 1) %}
-        <a href="{{ path }}log">Journal de bord</a>
+        <a href="{{ path }}log/index">Journal de bord</a>
         {% endif %}
 
         {% if guest %}

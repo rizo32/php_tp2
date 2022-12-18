@@ -16,7 +16,7 @@
                     <td>{{ log.logPage }}</td>
                     <td>{{ log.logDate }}</td>
                     <!-- à changer pour username -->
-                    <td>{{ log.EmployeCourriel }}</td>
+                    <td>{{ log.employeCourriel }}</td>
                     <td>{{ log.logAdresseIP }}</td>
                     <td>{{ log.logId }}</td>
                 </tr>
