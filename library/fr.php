@@ -8,12 +8,13 @@
         'Login' => "Connectez-vous",
         'Logout' => "Déconnectez-vous",
         'guest_greetings' => "Bienvenue",
-        'format_greetings' => "Bonjour Monsieur",
+        'formal_greetings' => "Bonjour Monsieur",
         'informal_greetings' => "Salut",
         'rude_greetings' => "Qui vous a envoyé en pause,",
 
     // HOME/INDEX
         'welcome' => "Bienvenue au portail des employés des écoles de magie",
+        'edit' => "Modifier",
 
     // ERROR
         'error' => "Erreur",

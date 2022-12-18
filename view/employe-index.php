@@ -21,7 +21,7 @@
                     <td>{{ employe.employeDateEmbauche }}</td>
                     <td>{{ employe.ecoleNom }}</td>
                     {%  if session.privilegeId == 1 %}
-                    <td><a href="{{ path }}employe/show/{{ employe.employeId }}">Modifier</a></td>
+                    <td><a href="{{ path }}employe/show/{{ employe.employeId }}">{{ lang.edit }}</a></td>
                     {% endif %}
                 </tr>
                 {% endfor %}

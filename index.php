@@ -21,10 +21,6 @@ if($url == '/'){
     $requestURL = ucfirst($requestURL);
     $controllerPath = __DIR__.'/controller/Controller'.$requestURL.'.php';
 
-    $requestURL2 = $url[1];
-    $requestURL2 = ucfirst($requestURL2);
-    $controllerPath = __DIR__.'/controller/Controller'.$requestURL.'.php';
-
     if(file_exists($controllerPath)){
         require_once($controllerPath);
         $controllerName = 'Controller'.$requestURL;

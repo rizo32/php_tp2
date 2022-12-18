@@ -3,6 +3,7 @@
 
 
 class ControllerLangue{
+    private $path = 'http://maisonneuve/PHP/TP3/code/';
 
     // Pour afficher le registre de Log
     public function fr(){
@@ -10,7 +11,9 @@ class ControllerLangue{
             setcookie('lang', 'fr', time() + (86400 * 30), "/"); // 86400 = 1 day
         }
         // require_once 'library/' . $_COOKIE['lang'] . '.php';
-        requirePage::redirectPage('home/index');
+        $lastPage = $_SERVER['HTTP_REFERER'];
+        $lastPage = substr($lastPage, strlen($this->path));
+        requirePage::redirectPage($lastPage);
     }
     
     // Pour afficher le registre de Log
@@ -19,7 +22,9 @@ class ControllerLangue{
             setcookie('lang', 'en', time() + (86400 * 30), "/"); // 86400 = 1 day
         }
         // require_once 'library/' . $_COOKIE['lang'] . '.php';
-        requirePage::redirectPage('home/index');
+        $lastPage = $_SERVER['HTTP_REFERER'];
+        $lastPage = substr($lastPage, strlen($this->path));
+        requirePage::redirectPage($lastPage);
     }
 }
 ?>

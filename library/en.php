@@ -8,12 +8,13 @@
         'Login' => "Login",
         'Logout' => "Logout",
         'guest_greetings' => "Welcome",
-        'format_greetings' => "Hello good sir",
+        'formal_greetings' => "Hello good sir",
         'informal_greetings' => "Hey,",
         'rude_greetings' => "Somebody sent you in break,",
 
     // HOME/INDEX
         'welcome' => "Welcome on the portal for the employees of the schools of magic",
+        'edit' => "Edit",
 
     // ERROR
         'error' => "Error",

@@ -41,11 +41,11 @@
             <p>{{ lang.guest_greetings }}!</p>
 
         {% elseif(session.privilegeId == 1) %}
-        <p>{{ lang.format_greetings }} {{ session.employeNom }}</p>
+        <p>{{ lang.formal_greetings }} {{ session.employeNom }}</p>
         <p>privilege: {{ session.privilegeId }}</p>
 
         {% elseif(session.privilegeId == 2) %}
-        <p>{{ lang.informat_greetings }} {{ session.employePrenom }}!</p>
+        <p>{{ lang.informal_greetings }} {{ session.employePrenom }}!</p>
         <p>privilege: {{ session.privilegeId }}</p>
 
         {% elseif(session.privilegeId == 3) %}
