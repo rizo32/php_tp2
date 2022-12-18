@@ -7,6 +7,10 @@ class Twig{
         $twig = new \Twig\Environment($loader, array('auto_reload' => true));
         // $twig->addGlobal('path', 'https://e2295331.webdev.cmaisonneuve.qc.ca/tp2ecolemagie/');
         $twig->addGlobal('path', 'http://maisonneuve/PHP/TP3/code/');
+        $twig->addGlobal('cookie', $_COOKIE);
+        require_once 'library/' . $_COOKIE['lang'] . '.php';
+
+        $twig->addGlobal('lang', $lang);
         // $twig->addGlobal('path', 'http://localhost/PHP/TP3/code/');
 
         // if (session_status() === PHP_SESSION_NONE) {

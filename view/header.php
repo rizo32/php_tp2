@@ -10,39 +10,46 @@
 </head>
 <body>
     <nav>
-        <a href="{{ path }}">Accueil</a>
+        <a href="{{ path }}home/index">{{ lang.home }}</a>
 
-        <a href="{{ path }}employe/index">Registre du personnel</a>
+        <a href="{{ path }}employe/index">{{ lang.employee_register }}</a>
 
         {% if(session.privilegeId == 1) or (session.privilegeId == 2) %}
-        <a href="{{ path }}employe/create">Embauche</a>
+        <a href="{{ path }}employe/create">{{ lang.hiring }}</a>
         {% endif %}
 
         {% if(session.privilegeId == 1) %}
-        <a href="{{ path }}log/index">Journal de bord</a>
+        <a href="{{ path }}log/index">{{ lang.log }}</a>
         {% endif %}
 
         {% if guest %}
-            <a href = "{{ path }}employe/login">Login</a>
+            <a href = "{{ path }}employe/login">{{ lang.Login }}</a>
         {% else %}
-            <a href = "{{ path }}employe/logout">Logout</a>
+            <a href = "{{ path }}employe/logout">{{ lang.Logout }}</a>
         {% endif %}
+
+        {% if cookie.lang == 'fr' %}
+            <a href = "{{ path }}langue/en">EN</a>
+        {% else %}
+            <a href = "{{ path }}langue/fr">FR</a>
+        {% endif %}
+        {{ cookie.lang }}
     </nav>
     <header>
         <h1>{{ pageHeader }}</h1>
         {% if guest %}
-            <p>Bienvenue!</p>
+            <p>{{ lang.guest_greetings }}!</p>
 
         {% elseif(session.privilegeId == 1) %}
-        <p>Bonjour Monsieur {{ session.employeNom }}</p>
+        <p>{{ lang.format_greetings }} {{ session.employeNom }}</p>
         <p>privilege: {{ session.privilegeId }}</p>
 
         {% elseif(session.privilegeId == 2) %}
-        <p>Salut {{ session.employePrenom }}!</p>
+        <p>{{ lang.informat_greetings }} {{ session.employePrenom }}!</p>
         <p>privilege: {{ session.privilegeId }}</p>
 
         {% elseif(session.privilegeId == 3) %}
-        <p>Retournez vite travaillez, {{ session.employePrenom }}!!</p>
+        <p>{{ lang.rude_greetings }} {{ session.employePrenom }}?</p>
         <p>privilege: {{ session.privilegeId }}</p>
 
         {% endif %}    

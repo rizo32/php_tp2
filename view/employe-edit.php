@@ -1,34 +1,36 @@
-{{ include('header.php', {title: 'Modification', pageHeader: 'Changez votre identité!'}) }}
+{{ include('header.php', {title: "#{ lang.employe_edit_title
+}", pageHeader: "#{ lang.employe_edit_header }!"}) }}
 
 <main>
     <form action="{{ path }}employe/update" method="post">
         <input type="hidden" name="employeId" value={{ employe.employeId }}>
-        <label>Nom 
+        <label>{{ lang.employe_lastname }} 
             <input type="text" name="employeNom" value={{ employe.employeNom }}>
         </label>
-        <label>Prénom
+        <label>{{ lang.employe_firstname }} 
             <input type="text" name="employePrenom" value={{ employe.employePrenom }}>
         </label>
-        <label>Votre poste
+        <label>{{ lang.employe_job }} 
         <select name="employePosteId">
             <option value=1
             {% if employe.employePosteId == 1 %}
             selected
             {% endif %}>
-            Directeur</option>
+            {{ lang.director }}</option>
             <option value=2
             {% if employe.employePosteId == 2 %}
             selected
             {% endif %}>
-            Professeur</option>
+            {{ lang.professor }}</option>
             <option value=3
             {% if employe.employePosteId == 3 %}
             selected
             {% endif %}>
-            Aide-cuisinier</option>
+            {{ lang.cook }}</option>
         </select></label>
-        <label>École
+        <label>{{ lang.school }}
         <select name="employeEcoleId">
+            <!-- ici ce sont des noms propres et les écoles ne veulent pas avoir leur nom traduit, ils ont été très clairs à ce sujet! -->
             <option value=1
             {% if employe.employeEcoleId == 1 %}
                 selected
@@ -70,10 +72,10 @@
             {% endif %}>
             Koldovstoretz</option>
         </select></label>
-        <label>Date d'embauche
+        <label>{{ lang.hiring_day }}
             <input type="date" name="employeDateEmbauche" value="{{ employe.employeDateEmbauche }}">
         </label>
-        <label>Courriel
+        <label>{{ lang.email }}
             <input type="email" name="employeCourriel" value="{{ employe.employeCourriel }}">
         </label>
         <input type="submit" value="Obliviate!">

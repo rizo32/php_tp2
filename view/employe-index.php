@@ -1,14 +1,14 @@
-{{ include('header.php', {title: 'Index des employés', pageHeader: 'Voici votre équipe'}) }}
+{{ include('header.php', {title: "#{ lang.employee_register }", pageHeader: "#{ lang.index_header }" }) }}
 <main>
     <table>
         <thead>
             <tr>
-                <th>Courriel</th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Poste</th>
-                <th>Date d'embauche</th>
-                <th>École</th>
+                <th>{{ lang.email }}</th>
+                <th>{{ lang.employe_lastname }}</th>
+                <th>{{ lang.employe_firstname }}</th>
+                <th>{{ lang.employe_job }}</th>
+                <th>{{ lang.hiring_day }}</th>
+                <th>{{ lang.school }}</th>
             </tr>
         </thead>
         <tbody>

@@ -1,7 +1,7 @@
-{{ include('header.php', {title: 'Erreur'}) }}
+{{ include('header.php', {title: "#{ lang.error }"}) }}
 
 <main>
-    <h3 class='error'>La page que vous cherchez n'existe pas :(</h3>
+    <h3 class='error'>{{ lang.no_page }} :(</h3>
 </main>
 
 {{ include('footer.php') }}

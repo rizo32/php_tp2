@@ -1,17 +1,14 @@
-{{ include('header.php', {title: 'Login', pageHeader: 'Connectez-vous'}) }}
+{{ include('header.php', {title: "#{ lang.login }", pageHeader: "#{ lang.login }" }) }}
 
 <main>
     <form action="{{ path }}employe/auth" method="post">
-        <label>Courriel 
+        <label>{{ lang.email }} 
             <input type="email" name="employeCourriel" value="{{ employe.employeCourriel }}">
         </label>
-        <label>Mot de passe 
+        <label>{{ lang.password }} 
             <input type="password" name="employeMotDePasse">
         </label>
         <input type="submit" value="Connecter">
-        <label>Vous avez oublié votre mot de passe?
-            <input type="submit" value="Oublie">
-        </label>
     </form>
 </main>
 

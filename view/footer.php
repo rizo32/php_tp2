@@ -1,3 +1,3 @@
-<p>&#169; tout les droits réservés</p>
+<p>&#169; {{ lang.rights }}</p>
 </body>
 </html>
