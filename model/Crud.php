@@ -7,7 +7,7 @@ abstract class Crud extends PDO {
         // parent::__construct('mysql:host=localhost; dbname=e2295331; port=3306; charset=utf8', 'e2295331', 'a1KDLCwOPsYmOSiR37yc');
     }
 
-    // Pour créer un régistre : pas utilisé jusqu'à présent (voir plut^t selectDoubleJoin dans model employe)
+    // Pour créer un régistre
     public function select($champ='employeId', $order='ASC'){
         $sql = "SELECT * FROM $this->table ORDER BY $champ $order";
         $stmt  = $this->query($sql);
@@ -54,15 +54,15 @@ abstract class Crud extends PDO {
         }
     }
 
-        // Pour créer un régistre avec (double) join
-        public function selectDoubleJoin($table2, $table3, $field1, $field2, $field3, $field4, $champOrdre, $ordre='ASC'){
-            $sql = "SELECT * FROM $this->table
-                                LEFT JOIN $table2 ON $field1 = $field2
-                                LEFT JOIN $table3 ON $field3 = $field4
-                    ORDER BY $champOrdre $ordre";
-            $stmt  = $this->query($sql);
-            return  $stmt->fetchAll();
-        }
+    // Pour créer un régistre avec (double) join
+    public function selectDoubleJoin($table2, $table3, $field1, $field2, $field3, $field4, $champOrdre, $ordre='ASC'){
+        $sql = "SELECT * FROM $this->table
+                            LEFT JOIN $table2 ON $field1 = $field2
+                            LEFT JOIN $table3 ON $field3 = $field4
+                ORDER BY $champOrdre $ordre";
+        $stmt  = $this->query($sql);
+        return  $stmt->fetchAll();
+    }
 
     // Pour créer une nouvelle instance
     public function insert($data){

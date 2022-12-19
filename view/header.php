@@ -33,7 +33,6 @@
         {% else %}
             <a href = "{{ path }}langue/fr">FR</a>
         {% endif %}
-        {{ cookie.lang }}
     </nav>
     <header>
         <h1>{{ pageHeader }}</h1>
@@ -42,30 +41,17 @@
 
         {% elseif(session.privilegeId == 1) %}
         <p>{{ lang.formal_greetings }} {{ session.employeNom }}</p>
-        <p>privilege: {{ session.privilegeId }}</p>
 
         {% elseif(session.privilegeId == 2) %}
         <p>{{ lang.informal_greetings }} {{ session.employePrenom }}!</p>
-        <p>privilege: {{ session.privilegeId }}</p>
 
         {% elseif(session.privilegeId == 3) %}
         <p>{{ lang.rude_greetings }} {{ session.employePrenom }}?</p>
-        <p>privilege: {{ session.privilegeId }}</p>
 
         {% endif %}    
     </header>
 
     <aside>
-        <form action="{{ path }}log/store" method="post">
-            <!-- <input type="hidden" name="logAdresseIP" value= "{{ session.logAdresseIP }}"> -->
-            <!-- <input type="hidden" name="logDate" value= "{{ session.logDate }}"> -->
-            <!-- {% if session.employeId %}
-                <input type="hidden" name="logEmployeId" value= "{{ session.employeId }}">
-            {% endif %}     -->
-        </form>
-
-
-
         {% if errors is defined %}
             <span class="error">{{ errors | raw}}</span>
         {% endif %}

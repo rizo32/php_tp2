@@ -9,17 +9,21 @@ class ControllerEmploye{
     // Pour afficher le registre d'employés
     public function index(){
         CheckSession::sessionAuth();
+
+        // Chaque changement de page entraine une insertion de données dans le log
         $log = new ModelLog;
         $log->store();
-        $employe = new ModelEmploye;
+
         // L'index fait intervenir des données de trois tables: employe, poste, ecole
         // Méthode du modele employé
+        $employe = new ModelEmploye;
         $select = $employe->selectDoubleJoin('poste', 'ecole', 'employePosteId', 'posteId', 'employeEcoleId', 'ecoleId', 'employeDateEmbauche');
         twig::render("employe-index.php", ['employes' => $select]);
     }
 
     // Pour afficher la page de création d'employés
     public function create(){
+        // Pour vérifier l'authentification
         CheckSession::sessionAuth();
         $log = new ModelLog;
         $log->store();
@@ -31,9 +35,6 @@ class ControllerEmploye{
         }else{
             requirePage::redirectPage('home/error');
         }
-
-        // $employe = new ModelEmploye;
-        // $employeMotDePasse = $employe->generationMotDePasse();
     }
 
     // Pour insérer les employés dans la base de données
@@ -47,11 +48,10 @@ class ControllerEmploye{
 
         $validation = new Validation;
         extract($_POST);
-        $validation->name('nom')->value($employeNom)->pattern('alpha')->required()->max(45);
-        // ne regarde pas si le nom est le même, seulement si ça fit le format
+        $validation->name('employeNom')->value($employeNom)->pattern('alpha')->required()->max(45);
+        $validation->name('employePrenom')->value($employePrenom)->pattern('alpha')->required()->max(45);
         $validation->name('employeCourriel')->value($employeCourriel)->pattern('email')->required()->max(50);
         $validation->name('employeMotDePasse')->value($employeMotDePasse)->max(20)->min(6);
-        // $validation->name('privilege_id')->value($privilege_id)->pattern('int')->required();
 
         if($validation->isSuccess()){
             $employe = new ModelEmploye;
@@ -64,19 +64,17 @@ class ControllerEmploye{
             $timestamp = time();
             $dt = new DateTime("now", new DateTimeZone($tz));
             $dt->setTimestamp($timestamp);
-
             $_POST['employeDateEmbauche'] = $dt->format('Y-m-d');
+
             $insert = $employe->insert($_POST);
-            requirePage::redirectPage('employe');
+            requirePage::redirectPage('employe/index');
         }else{
             $errors = $validation->displayErrors();
-            // $privilege = new ModelPrivilege;
-            // $selectPrivilege = $privilege->select();
-            // twig::render('employe-create.php', ['errors' => $errors,'privileges' => $selectPrivilege, 'employe' => $_POST]);
             twig::render('employe-create.php', ['errors' => $errors, 'employe' => $_POST]);
         }
     }
 
+    // pour faire le login des employés
     public function login(){
         $log = new ModelLog;
         $log->store();
@@ -84,52 +82,38 @@ class ControllerEmploye{
         twig::render('employe-login.php');
     }
 
+    // authentification
     public function auth(){
         $validation = new Validation;
         extract($_POST);
-        $validation->name('employeCourriel')->value($employeCourriel)->pattern('email')->required()->max(50);
-        $validation->name('employeMotDePasse')->value($employeMotDePasse)->required();
+        if(isset($employeCourriel) && isset($employeMotDePasse)){
+            $validation->name('employeCourriel')->value($employeCourriel)->pattern('email')->required()->max(45);
+            $validation->name('employeMotDePasse')->value($employeMotDePasse)->required();
+        }
 
         if($validation->isSuccess()){
-            // session_start();
-
             $employe = new ModelEmploye;
             $checkEmploye = $employe->checkEmploye($_POST);
-            
-
-            twig::render('home-index.php', ['errors' => $checkEmploye]);
-            // twig::render('employe-login.php', ['errors' => $checkEmploye, 'employe' => $_POST]);
-        
+            twig::render('employe-login.php', ['errors' => $checkEmploye, 'employe' => $_POST]);        
         }else{
             $errors = $validation->displayErrors();
             twig::render('employe-login.php', ['errors' => $errors, 'employe' => $_POST]);
         }
     }
 
-
+    // log out
     public function logout(){
-        // If it's desired to kill the session, also delete the session cookie.
-        // Note: This will destroy the session, and not just the session data!
-        // if (ini_get("session.use_cookies")) {
-        //     $params = session_get_cookie_params();
-        //     setcookie(session_name(), '', time() - 42000,
-        //         $params["path"], $params["domain"],
-        //         $params["secure"], $params["httponly"]
-        //     );
-        // }
-
-
         session_destroy();
         requirePage::redirectPage('employe/login');
     }
 
-
-    // Fait intervenir des données de trois tables: employe, poste, ecole
+    // Pour voir les info d'un employé selon son ID
     public function show($employeId){
         $log = new ModelLog;
         $log->store();
-
+        
         $employe = new ModelEmploye;
+        // Fait intervenir des données de trois tables: employe, poste, ecole
         $selectEmploye = $employe->selectIdJoin($employeId, 'poste', 'ecole', 'employePosteId', 'posteId', 'employeEcoleId', 'ecoleId');
         twig::render('employe-show.php', ['employe' => $selectEmploye]);
     }

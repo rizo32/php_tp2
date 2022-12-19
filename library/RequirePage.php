@@ -6,7 +6,6 @@ class RequirePage{
     }
     static public function redirectPage($page){
         return header("Location: http://maisonneuve/PHP/TP3/code/".$page);
-        // return header("Location: http://localhost/PHP/TP3/code/".$page);
     }
 }
 

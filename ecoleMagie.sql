@@ -74,9 +74,10 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ecolemagie`.`log` (
   `logId` INT NOT NULL AUTO_INCREMENT,
-  `logAdresseIP` INT NOT NULL,
+  `logAdresseIP` VARCHAR(30) NOT NULL,
   `logDate` DATETIME NOT NULL,
   `logEmployeId` INT,
+  `logPage` VARCHAR(200),
   PRIMARY KEY (`logId`),
   INDEX `fk_log_employe1_idx` (`logEmployeId` ASC),
   CONSTRAINT `fk_log_employe1_idx`

@@ -6,6 +6,7 @@ RequirePage::requireModel('ModelLog');
 class ControllerHome{
 
     public function index(){
+        // Chaque changement de page entraine une insertion de données dans le log
         $log = new ModelLog;
         $log->store();
 
