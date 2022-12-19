@@ -1,9 +1,3 @@
-# À faire
-
-1. Journal Log
-1. Faire en sorte que les profs peuvent embaucher des aides-cuisiniers
-1. Complexifier la validation
-
 # ecoleMagie
 
 ## Liens
