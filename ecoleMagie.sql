@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `ecolemagie`.`log` (
   CONSTRAINT `fk_log_employe1_idx`
     FOREIGN KEY (`logEmployeId`)
     REFERENCES `ecolemagie`.`employe` (`employeId`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 

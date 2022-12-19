@@ -139,9 +139,6 @@ class ControllerEmploye{
 
     // Pour modifier les information d'un employé précis
     public function update(){
-        $log = new ModelLog;
-        $log->store();
-
         $employe = new ModelEmploye;
         $update = $employe->update($_POST);
         RequirePage::redirectPage('employe/show/'.$_POST['employeId']);

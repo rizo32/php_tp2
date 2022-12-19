@@ -52,7 +52,7 @@
     // EMPLOYE/SHOW
         'your_account' => "Votre compte",
         'change_info' => "Modifier les information de l'employé",
-        'polynestar_potion' => "Une potion de polynectar",
+        'polynectar_potion' => "Une potion de polynectar",
 
     // FOOTER
         'rights' => "tous les droits réservés"

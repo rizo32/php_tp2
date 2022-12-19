@@ -6,6 +6,8 @@ class ControllerLog{
 
     // Pour afficher le registre de Log
     public function index(){
+        $log = new ModelLog;
+        $log->store();
         CheckSession::sessionAuth();
         if ($_SESSION['privilegeId'] == 1){
             $log = new ModelLog;
