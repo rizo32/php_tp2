@@ -6,7 +6,7 @@ class ControllerLangue{
 
     // Vers le français
     public function fr(){
-        if($_COOKIE['lang'] != 'fr'){
+        if($_SESSION['lang'] != 'fr'){
             setcookie('lang', 'fr', time() + (86400 * 30), "/"); // 86400 = 1 day
         }
         // Pour ne pas changer de page lors du changement de langue
@@ -17,7 +17,7 @@ class ControllerLangue{
     
     // Vers l'anglais
     public function en(){
-        if($_COOKIE['lang'] != 'en'){
+        if($_SESSION['lang'] != 'en'){
             setcookie('lang', 'en', time() + (86400 * 30), "/"); // 86400 = 1 day
         }
         // Pour ne pas changer de page lors du changement de langue

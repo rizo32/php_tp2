@@ -7,9 +7,13 @@ class Twig{
         $twig = new \Twig\Environment($loader, array('auto_reload' => true));
         // $twig->addGlobal('path', 'https://e2295331.webdev.cmaisonneuve.qc.ca/tp2ecolemagie/');
         $twig->addGlobal('path', 'http://maisonneuve/PHP/TP3/code/');
-        $twig->addGlobal('cookie', $_COOKIE);
+        // $twig->addGlobal('cookie', $_SESSION);
         // On va chercher le glossaire de langue correspondant à la variable enregistrée dans les cookies
-        require_once 'library/' . $_COOKIE['lang'] . '.php';
+        if(!isset($_SESSION['lang'])){
+            $_SESSION['lang'] = 'en';
+        }
+
+        require_once 'library/' . $_SESSION['lang'] . '.php';
         $twig->addGlobal('lang', $lang);
         
         // Log in
